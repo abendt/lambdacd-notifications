@@ -6,4 +6,6 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/core.async "0.1.338.0-5c5012-alpha"]
                  [lambdacd "0.9.1"]
-                 [clj-http "2.2.0"]])
+                 [clj-http "2.2.0"]
+                 [ch.viascom/hipchat-api "2.1-RC3"]
+                 ])
