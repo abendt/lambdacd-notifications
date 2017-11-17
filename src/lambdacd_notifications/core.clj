@@ -1,6 +1,7 @@
 (ns lambdacd-notifications.core
   (:require [clojure.core.async :as async]
             [lambdacd.event-bus :as event-bus]
+            [clojure.tools.logging :as log]
             [lambdacd.internal.pipeline-state :as internal-pipeline-state]
             [lambdacd.presentation.pipeline-state :as presentation-pipeline-state]))
 
@@ -12,6 +13,7 @@
         step-ids-and-results-for-current-build (get step-ids-and-results-for-all-builds build-number)
         overall-build-status                   (presentation-pipeline-state/overall-build-status step-ids-and-results-for-current-build)
         build-duration                         (presentation-pipeline-state/build-duration step-ids-and-results-for-current-build)]
+    (log/info "notify status " overall-build-status " event " event)
     (when (not-any? #(= overall-build-status %) ignored-statuses)
       (.notify notifier {:status       overall-build-status
                          :duration     build-duration
