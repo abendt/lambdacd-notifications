@@ -101,12 +101,15 @@
 (defn hipchat-text [{:keys [event]}]
   (get-in event [:final-result :out]))
 
+(defn trim-text [text length]
+  (if (> (count text) length)
+    (str (subs text 0 length) "...")
+    text))
+
 (defn build-payload [ci-host {:keys [build-number status duration event]}]
 
   (let [description             (get-in event [:final-result :out])
-        shortened_description   (if (> (count description) 500)
-                                  (str (subs description 0 490) "...")
-                                  description)]
+        shortened_description   (trim-text description 495)]
 
     (hipchat-card
      {:url         (->build-url ci-host build-number)
@@ -120,9 +123,9 @@
   Notifier
   (notify [this overall-build-info]
 
-          (let [hipchat-text (hipchat-text overall-build-info)
-                hipchat-card (build-payload ci-host overall-build-info)]
-
+          (let [hipchat-text   (hipchat-text overall-build-info)
+                shortened_text (trim-text hipchat-text 9990)
+                hipchat-card   (build-payload ci-host overall-build-info)]
 
             (hipchat-notification {:text hipchat-text :card hipchat-card}
                                   {:access_token access-token
