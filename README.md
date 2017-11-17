@@ -4,11 +4,11 @@ This is still a WIP. Please do not start using this library until you see this w
 
 This library is intended for notifying final build status through channels like slack, email, hipchat, etc...
 
-##Screenshot
+## Screenshot
 
 ![image](https://cloud.githubusercontent.com/assets/919715/17907660/899e0b54-699a-11e6-9768-56e64eabff1b.png)
 
-##Usage
+## Usage
 
 ```clojure
 
@@ -24,3 +24,23 @@ This library is intended for notifying final build status through channels like 
 
 Currently, only slack notification is supported in the library and I am planning to add more notifiers in the future.
 But, you could create your own notifier by extending the `Notifier` protocol.
+
+## Hipchat
+
+see Screenshot in doc directory
+
+```clojure
+(require '[lambdacd-notifications.core :as notifications])
+(require '[lambdacd-notifications.hipchat.core :as hipchat])
+
+(def hipchat-notifier
+  (hipchat/map->HipchatNotifier
+   {:base-url     "<hipchat server>"
+    :access-token "<hipchat access token>"
+    :room-id      "<hipchat room id>"
+    :bot-name     "<bot name>"
+    :ci-host      "<lambdacd base url>"}))
+    
+(notifications/setup pipeline slack-notifier)
+
+```
