@@ -15,10 +15,11 @@
 
 (def hipchat-notifier
   (hipchat/map->HipchatNotifier
-    {:hipchat-base-url    "..."
-     :hipchat-access-token "..."
-     :hipchat-room-id     "..."
-     :ci-host             "..."}))
+   {:base-url     "<hipchat server>"
+    :access-token "<hipchat access token>"
+    :room-id      "<hipchat room id>"
+    :bot-name     "<bot name>"
+    :ci-host      "<lambdacd base url>"}))
 
 (defn -main [& args]
   (let [;; the home dir is where LambdaCD saves all data.

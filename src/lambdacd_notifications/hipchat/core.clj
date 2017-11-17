@@ -98,6 +98,9 @@
   (.toString
     (java.net.URL. (java.net.URL. ci-host) (str "/#/builds/" build-number))))
 
+(defn hipchat-text [{:keys [event]}]
+  (get-in event [:final-result :out]))
+
 (defn build-payload [ci-host {:keys [build-number status duration event]}]
 
   (let [description             (get-in event [:final-result :out])
@@ -113,14 +116,16 @@
       :status      (->status-message status)
       :duration    (str "Took " duration " seconds to run")})))
 
-(defrecord HipchatNotifier [hipchat-base-url hipchat-access-token hipchat-room-id ci-host]
+(defrecord HipchatNotifier [base-url access-token room-id bot-name ci-host]
   Notifier
   (notify [this overall-build-info]
 
-          (let [hipchat-card (build-payload ci-host overall-build-info)]
+          (let [hipchat-text (hipchat-text overall-build-info)
+                hipchat-card (build-payload ci-host overall-build-info)]
 
-            (hipchat-notification {:text "TODO" :card hipchat-card}
-                                  {:access_token hipchat-access-token
-                                   :base_url     hipchat-base-url
-                                   :room_id      hipchat-room-id
-                                   :bot_name     "TODO"}))))
+
+            (hipchat-notification {:text hipchat-text :card hipchat-card}
+                                  {:access_token access-token
+                                   :base_url     base-url
+                                   :room_id      room-id
+                                   :bot_name     bot-name}))))
